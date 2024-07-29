@@ -1,49 +1,62 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Coins, CreditCard } from "lucide-react";
+import { Cherry, Lemon, Seven, Clover } from "lucide-react";
 
-const games = [
-  { name: "Slots", icon: <Coins className="h-6 w-6" /> },
-  { name: "Blackjack", icon: <CreditCard className="h-6 w-6" /> },
-  { name: "Roulette", icon: <Coins className="h-6 w-6" /> },
-  { name: "Poker", icon: <CreditCard className="h-6 w-6" /> },
-];
+const symbols = [Cherry, Lemon, Seven, Clover];
 
 const Index = () => {
   const [balance, setBalance] = useState(1000);
+  const [reels, setReels] = useState([0, 0, 0]);
+  const [spinning, setSpinning] = useState(false);
+
+  const spin = () => {
+    if (balance < 10) return;
+    setBalance(balance - 10);
+    setSpinning(true);
+    const newReels = reels.map(() => Math.floor(Math.random() * symbols.length));
+    setReels(newReels);
+    setTimeout(() => {
+      setSpinning(false);
+      if (newReels.every((val, i, arr) => val === arr[0])) {
+        setBalance(balance + 100);
+      }
+    }, 1000);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-indigo-900 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-b from-red-700 to-yellow-500 text-white p-8">
       <header className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-4">Lucky Streak Casino</h1>
-        <p className="text-xl">Where Fortune Favors the Bold</p>
+        <h1 className="text-5xl font-bold mb-4">Lucky Streak Slots</h1>
+        <p className="text-xl">Spin to Win!</p>
       </header>
 
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white/10 rounded-lg p-4 mb-8 text-center">
-          <p className="text-2xl">Your Balance: ${balance}</p>
-          <Button onClick={() => setBalance(balance + 100)} className="mt-2">Add $100</Button>
+      <div className="max-w-2xl mx-auto bg-gray-800 rounded-lg p-8 shadow-2xl">
+        <div className="bg-yellow-400 rounded-lg p-4 mb-8 text-center text-gray-800">
+          <p className="text-3xl font-bold">Balance: ${balance}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {games.map((game) => (
-            <Card key={game.name} className="bg-white/5 border-none text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  {game.name}
-                  {game.icon}
-                </CardTitle>
-                <CardDescription className="text-gray-300">Try your luck!</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <img src="/placeholder.svg" alt={game.name} className="mx-auto object-cover w-full h-[200px] rounded-md" />
-              </CardContent>
-              <CardFooter>
-                <Button className="w-full">Play Now</Button>
-              </CardFooter>
-            </Card>
-          ))}
+        <div className="flex justify-center space-x-4 mb-8">
+          {reels.map((symbolIndex, index) => {
+            const Symbol = symbols[symbolIndex];
+            return (
+              <div key={index} className="bg-white w-24 h-24 rounded-lg flex items-center justify-center">
+                <Symbol className={`h-16 w-16 ${spinning ? 'animate-spin' : ''}`} />
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex justify-between items-center">
+          <Button
+            onClick={spin}
+            disabled={spinning || balance < 10}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-xl"
+          >
+            SPIN
+          </Button>
+          <div className="w-16 h-48 bg-gray-300 rounded-full relative">
+            <div className={`w-8 h-8 bg-red-600 rounded-full absolute left-1/2 transform -translate-x-1/2 transition-all duration-300 ${spinning ? 'top-full -translate-y-full' : 'top-0'}`}></div>
+          </div>
         </div>
       </div>
     </div>
