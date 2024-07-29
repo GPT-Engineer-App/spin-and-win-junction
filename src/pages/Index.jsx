@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Cherry, Lemon, Seven, Clover } from "lucide-react";
+import { Cherry, Seven, Clover } from "lucide-react";
 
-const symbols = [Cherry, Lemon, Seven, Clover];
+const symbols = [Cherry, Seven, Clover];
 
 const Index = () => {
   const [balance, setBalance] = useState(1000);
