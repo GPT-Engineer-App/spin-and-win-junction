@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Coins, CreditCard, Spades } from "lucide-react";
+import { Coins, CreditCard } from "lucide-react";
 
 const games = [
   { name: "Slots", icon: <Coins className="h-6 w-6" /> },
   { name: "Blackjack", icon: <CreditCard className="h-6 w-6" /> },
   { name: "Roulette", icon: <Coins className="h-6 w-6" /> },
-  { name: "Poker", icon: <Spades className="h-6 w-6" /> },
+  { name: "Poker", icon: <CreditCard className="h-6 w-6" /> },
 ];
 
 const Index = () => {
